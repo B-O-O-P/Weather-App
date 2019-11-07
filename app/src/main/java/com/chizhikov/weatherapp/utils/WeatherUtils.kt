@@ -38,7 +38,7 @@ class WeatherUtils {
                 weatherType.contains("rain", true) -> R.drawable.forecast_image_rainy_6
                 weatherType.contains("snow", true) -> R.drawable.forecast_image_snowy_5
                 weatherType.contains("clear", true) -> R.drawable.forecast_image_day
-                else -> R.drawable.forecast_image_cloudy_night_1
+                else -> R.drawable.ic_cloudy_night_3
             }
         }
     }
