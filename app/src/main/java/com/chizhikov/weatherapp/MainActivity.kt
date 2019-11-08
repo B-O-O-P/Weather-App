@@ -28,7 +28,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 private const val LOG_TAG = "Weather API"
-private const val UPDATE_TIME_IN_MINUTES = 5
+private const val UPDATE_TIME_IN_MINUTES = 1
 
 @RequiresApi(Build.VERSION_CODES.N)
 class MainActivity : AppCompatActivity() {
@@ -54,11 +54,8 @@ class MainActivity : AppCompatActivity() {
         initGeneralForecast()
         initDailyForecasts()
 
-
         if (!updatedNeeded()) {
             if (!loadDataFromDB(realm)) {
-                clearDB(realm)
-
                 loadDataFromApi()
 
                 if (savedInstanceState != null) {
@@ -76,9 +73,7 @@ class MainActivity : AppCompatActivity() {
 
         main_refresh.setOnRefreshListener {
             main_refresh.isRefreshing = true
-            if (updatedNeeded()) {
-                loadDataFromApi()
-            }
+            loadDataFromApi()
             main_refresh.isRefreshing = false
         }
     }
@@ -175,8 +170,10 @@ class MainActivity : AppCompatActivity() {
     //LOAD FROM API
 
     private fun loadDataFromApi() {
-        clearDB(realm)
-        loadForecastFromApi("RU", "Saint Petersburg")
+        if (clearDB(realm)) {
+            realmModel.addTime(realm, getCurrentTime().time)
+            loadForecastFromApi("RU", "Saint Petersburg")
+        }
     }
 
     private fun loadForecastFromApi(countryID: String, query: String) {
